@@ -93,7 +93,7 @@ export default function Posts() {
           <Data>
 
               {posts.map(post => (
-                <div class="card" key={post.id}>
+                <div key={post.id}>
                   <h2>{post.title}</h2>
                   <h4>{post.text}</h4>
                   <p>Usuário {post.user_id}</p>
