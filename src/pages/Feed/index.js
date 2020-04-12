@@ -101,7 +101,7 @@ export default function Posts() {
                     <button
                       type="button"
                       onClick={() =>
-                        history.push(`/post/${post.id}/edit`)
+                        history.push(`/posts/${post.id}/edit`)
                       }
                     >
                       editar

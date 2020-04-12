@@ -1,4 +1,5 @@
 export const items = {
-  feed: { name: 'Feed', route: '/feed' },
+  feed: { name: 'Feed', route: '/posts' },
+
 
 };

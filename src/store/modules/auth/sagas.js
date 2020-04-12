@@ -17,13 +17,12 @@ export function* signIn({ payload }) {
     });
 
     const { token, user } = response.data;
-    console.log(token, user);
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
     yield put(signInSuccess(token, user));
 
-    history.push('/feed');
+    history.push('/posts');
   } catch (error) {
     toast.error(error.response.data.error);
     yield put(signFailure());

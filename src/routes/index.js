@@ -4,7 +4,7 @@ import Route from './Route';
 
 import SignIn from '../pages/Sigin';
 import Feed from '../pages/Feed';
-
+import PostForm from '../pages/PostForm';
 import { items } from '../components/Header/navigation';
 
 export default function Routes() {
@@ -18,7 +18,18 @@ export default function Routes() {
         isPrivate
         exact
       />
-
+      <Route
+        path={`${items.feed.route}/new`}
+        component={PostForm}
+        navItem={items.feed.name}
+        isPrivate
+      />
+      <Route
+        path={`${items.feed.route}/:id/edit`}
+        component={PostForm}
+        navItem={items.feed.name}
+        isPrivate
+      />
     </Switch>
   );
 }
