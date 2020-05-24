@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { Input, Textarea } from '@rocketseat/unform';
 import * as Yup from 'yup';
-
+import {  useSelector } from 'react-redux';
 import { MdKeyboardArrowLeft, MdCheck } from 'react-icons/md';
 
 
@@ -18,13 +18,18 @@ import { Container, PageTop, Data } from './styles';
 
 const schema = Yup.object().shape({
   title: Yup.string().required(validation.required),
-  text: Yup.string()
+  mensage: Yup.string()
     .required(validation.required),
+  contact: Yup.string()
+  .required('O contato e obrigatorio'),
+  category: Yup.string()
+
+
 });
 
 export default function PostForm() {
   const [post, setPost] = useState({});
-
+  const { profile } =  useSelector(state => state.user);
   const { id } = useParams();
 
   useEffect(() => {
@@ -33,8 +38,9 @@ export default function PostForm() {
         const { data } = await api.get('posts', {
           params: { id },
         });
+        console.log(data[0]);
 
-        setPost(data);
+        setPost(data[0]);
       } catch (err) {
         toast.error(err.response.data.error);
       }
@@ -50,12 +56,40 @@ export default function PostForm() {
   }
 
   async function insertPost(data) {
-    await api.post('posts', data);
+    console.log(data);
+
+    if(data.category == "venda") {
+      console.log(data.category =="venda", data.category);
+
+      data.category_id = "f79c86f4-aca4-4252-aa59-cb676bcf27ef"
+    } else if (data.category == "adocao") {
+      data.category_id = "da5b2a4d-3408-4e00-9e81-bc86203d7494"
+    } else {
+      data.category_id = null;
+    }
+    delete data.category;
+    data.owner_id = profile.id;
+    //await api.post('posts', data);
     toast.success('Cadastro realizado');
   }
 
   async function updatePost(data) {
-    await api.put(`posts/${post.id}`, data);
+    console.log(data);
+
+    if(data.category == "venda") {
+      data.category_id = "f79c86f4-aca4-4252-aa59-cb676bcf27ef"
+    } else if (data.category == "adocao") {
+      data.category_id = "da5b2a4d-3408-4e00-9e81-bc86203d7494"
+    } else {
+      data.category_id = null;
+    }
+    data.owner_id = post.owner_id;
+    delete data.category;
+    console.log("data apos troca", data);
+
+     const teste = await api.put(`posts/${post.id}`, data);
+     console.log(teste);
+
     toast.success('Cadastro alterado');
   }
 
@@ -103,7 +137,23 @@ export default function PostForm() {
         <Input name="title" placeholder="Meu Título" />
 
         <label>TEXTO</label>
-        <Textarea name="text" placeholder="Meu Texto " />
+        <Textarea name="mensage" placeholder="Meu Texto " />
+        <label>CONTATO</label>
+        <Textarea name="contact" placeholder="Meu e-mail ou telefone para contato " />
+        {!isNewPost() ? <> </> :
+        <>
+        <label>CATEGORIA</label>
+        <div >
+
+        <label for="adocao">ADOÇÃO</label>
+        <Input type="radio"  name="category" value="adocao"/>
+        <label for="venda">VENDA</label>
+        <Input type="radio"  name="category" value="venda"/>
+
+
+        </div>
+        </>
+        }
 
 
       </Data>

@@ -99,4 +99,15 @@ export const Data = styled(Form)`
       }
     }
   }
+  div {
+    display: flex;
+    align-items: center;
+
+    input {
+      margin: 0 10px;
+    }
+    label {
+      margin : 0;
+    }
+  }
 `;

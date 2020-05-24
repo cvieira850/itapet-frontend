@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-
+import {  useSelector } from 'react-redux';
 import { MdAdd, MdSearch } from 'react-icons/md';
 
 import api from '../../services/api';
@@ -13,6 +13,7 @@ export default function Posts() {
   const [posts, setPosts] = useState([]);
   const [lastPage, setLastPage] = useState(false);
   const [page, setPage] = useState(1);
+  const { profile } =  useSelector(state => state.user);
 
   useEffect(() => {
     fecthPosts(1);
@@ -24,13 +25,17 @@ export default function Posts() {
         params: { q: postTitle, page: currentPage },
       });
 
+      console.log(data);
+
+
       setPage(currentPage);
       setLastPage(data.lastPage);
       setPosts(data.content);
     } catch (err) {
       console.log(err);
 
-      toast.error(err.response.data.error);
+      /* const { error } = err.response.data; */
+        toast.error("Erro ao listar posts");
     }
   }
 
@@ -94,10 +99,14 @@ export default function Posts() {
 
               {posts.map(post => (
                 <div key={post.id}>
+                  <span>
+                  {post.category_id === "da5b2a4d-3408-4e00-9e81-bc86203d7494" ? "Adoção": "Venda"}
+                  </span>
                   <h2>{post.title}</h2>
-                  <h4>{post.text}</h4>
-                  <p>Usuário {post.user_id}</p>
-
+                  <h4>{post.mensage}</h4>
+                  <p>Contato:{post.contact}</p>
+                  {profile.id === post.owner_id &&
+                  <>
                     <button
                       type="button"
                       onClick={() =>
@@ -112,6 +121,11 @@ export default function Posts() {
                     >
                       apagar
                     </button>
+                    </>
+                  }
+
+
+
 
                 </div>
               ))}

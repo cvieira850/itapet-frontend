@@ -91,6 +91,17 @@ export const Data = styled.div`
       :hover {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
       }
+      span {
+        display: flex;
+        margin-top: -10px;
+        background-color: #4DAB9A;
+        width: 68px;
+        border-radius: 4px;
+        height: 24px;
+        color: #FFF;
+        justify-content: center;
+        align-items: center;
+      }
       h4{
         color: #666666;
         margin: 10px 0 ;
