@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import { Input, Textarea } from '@rocketseat/unform';
+/* import {  Textarea } from '@rocketseat/unform'; */
 import * as Yup from 'yup';
 import {  useSelector } from 'react-redux';
+import Input from '../../components/Input';
+import TextArea from '../../components/TextArea';
+import RadioInput from '../../components/RadioInput';
 import { MdKeyboardArrowLeft, MdCheck } from 'react-icons/md';
 
 
@@ -56,45 +59,44 @@ export default function PostForm() {
   }
 
   async function insertPost(data) {
-    console.log(data);
-
-    if(data.category == "venda") {
-      console.log(data.category =="venda", data.category);
-
+    if(data.category.venda === true) {
       data.category_id = "f79c86f4-aca4-4252-aa59-cb676bcf27ef"
-    } else if (data.category == "adocao") {
+    } else if (data.category.adocao === true ) {
+
       data.category_id = "da5b2a4d-3408-4e00-9e81-bc86203d7494"
     } else {
       data.category_id = null;
     }
     delete data.category;
     data.owner_id = profile.id;
-    //await api.post('posts', data);
+    await api.post('posts', data);
     toast.success('Cadastro realizado');
   }
 
   async function updatePost(data) {
-    console.log(data);
 
-    if(data.category == "venda") {
+    if(data.category.venda === true) {
       data.category_id = "f79c86f4-aca4-4252-aa59-cb676bcf27ef"
-    } else if (data.category == "adocao") {
+    } else if (data.category.adocao === true ) {
+
       data.category_id = "da5b2a4d-3408-4e00-9e81-bc86203d7494"
     } else {
       data.category_id = null;
     }
     data.owner_id = post.owner_id;
     delete data.category;
-    console.log("data apos troca", data);
 
      const teste = await api.put(`posts/${post.id}`, data);
-     console.log(teste);
 
     toast.success('Cadastro alterado');
   }
 
   async function handleFormSubmit(data) {
     try {
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+
       if (isNewPost()) {
         await insertPost(data);
       } else {
@@ -120,16 +122,12 @@ export default function PostForm() {
             <MdKeyboardArrowLeft size={20} color="#fff" />
             <span>VOLTAR</span>
           </button>
-          <button type="submit" form="Form">
-            <MdCheck size={20} color="#fff" />
-            <span>SALVAR</span>
-          </button>
+
         </div>
       </PageTop>
 
       <Data
-        id="Form"
-        schema={schema}
+
         initialData={post}
         onSubmit={handleFormSubmit}
       >
@@ -137,24 +135,27 @@ export default function PostForm() {
         <Input name="title" placeholder="Meu Título" />
 
         <label>TEXTO</label>
-        <Textarea name="mensage" placeholder="Meu Texto " />
+        <TextArea name="mensage" placeholder="Meu Texto " />
         <label>CONTATO</label>
-        <Textarea name="contact" placeholder="Meu e-mail ou telefone para contato " />
+        <TextArea name="contact" placeholder="Meu e-mail ou telefone para contato " />
         {!isNewPost() ? <> </> :
         <>
         <label>CATEGORIA</label>
         <div >
 
         <label for="adocao">ADOÇÃO</label>
-        <Input type="radio"  name="category" value="adocao"/>
+        <RadioInput type="radio"  name="category" value="adocao"/>
         <label for="venda">VENDA</label>
-        <Input type="radio"  name="category" value="venda"/>
+        <RadioInput type="radio"  name="category" value="venda"/>
 
 
         </div>
         </>
         }
-
+        <button type="submit" >
+            <MdCheck size={20} color="#fff" />
+            <span>SALVAR</span>
+        </button>
 
       </Data>
     </Container>

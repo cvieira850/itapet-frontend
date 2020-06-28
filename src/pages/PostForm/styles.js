@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Form } from '@rocketseat/unform';
+import { Form } from '@unform/web';
 
 import { validationErrorSpan, actionButton, cancelButton } from '../../styles/util';
 
