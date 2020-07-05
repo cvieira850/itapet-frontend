@@ -86,7 +86,7 @@ export default function PostForm() {
     data.owner_id = post.owner_id;
     delete data.category;
 
-     const teste = await api.put(`posts/${post.id}`, data);
+     await api.put(`posts/${post.id}`, data);
 
     toast.success('Cadastro alterado');
   }
